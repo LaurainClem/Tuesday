@@ -1,0 +1,9 @@
+D:\ESIMED\Projet .Net\Tuesday\MyFramework.Core\bin\Debug\netstandard2.1\MyFramework.Core.deps.json
+D:\ESIMED\Projet .Net\Tuesday\MyFramework.Core\bin\Debug\netstandard2.1\MyFramework.Core.dll
+D:\ESIMED\Projet .Net\Tuesday\MyFramework.Core\bin\Debug\netstandard2.1\MyFramework.Core.pdb
+D:\ESIMED\Projet .Net\Tuesday\MyFramework.Core\obj\Debug\netstandard2.1\MyFramework.Core.csprojAssemblyReference.cache
+D:\ESIMED\Projet .Net\Tuesday\MyFramework.Core\obj\Debug\netstandard2.1\MyFramework.Core.AssemblyInfoInputs.cache
+D:\ESIMED\Projet .Net\Tuesday\MyFramework.Core\obj\Debug\netstandard2.1\MyFramework.Core.AssemblyInfo.cs
+D:\ESIMED\Projet .Net\Tuesday\MyFramework.Core\obj\Debug\netstandard2.1\MyFramework.Core.csproj.CoreCompileInputs.cache
+D:\ESIMED\Projet .Net\Tuesday\MyFramework.Core\obj\Debug\netstandard2.1\MyFramework.Core.dll
+D:\ESIMED\Projet .Net\Tuesday\MyFramework.Core\obj\Debug\netstandard2.1\MyFramework.Core.pdb
