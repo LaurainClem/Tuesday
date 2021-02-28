@@ -7,6 +7,7 @@ namespace Tuesday.Entities
 {
     public class JalonEntity
     {
+        public int Id { get; set; }
 
     }
 }

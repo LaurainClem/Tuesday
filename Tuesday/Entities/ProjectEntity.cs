@@ -7,6 +7,8 @@ namespace Tuesday.Entities
 {
     public class ProjectEntity
     {
+        public int Id { get; set; }
+
         public string label { get; set; }
 
         public ProjectEntity(string label)

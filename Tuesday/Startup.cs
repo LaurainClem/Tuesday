@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +33,8 @@ namespace Tuesday
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddScoped<IProjectService, ProjectService>();
-            services.AddDbContext<DbManager>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<DbManager>(options => options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,5 +7,7 @@ namespace Tuesday.Entities
 {
     public class UtilisateurEntity
     {
+        public int Id { get; set; }
+
     }
 }

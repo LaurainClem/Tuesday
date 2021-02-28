@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,14 +8,15 @@ namespace Tuesday.Entities
 {
     public class TaskEntity
     {
-        private string label { get; set; }
-        private int id { get; set; }
-        private string description { get; set; }
-        private UtilisateurEntity asignee { get; set; }
-        private List<ExigenceEntity> exigences{ get; set; }
-        private  DateTime plannedStartDate { get; set; }
-        private  DateTime realStartDate { get; set; }
-        private  int cost { get; set; }
-        private  TaskEntity requiredTask { get; set; }
+        public string label { get; set; }
+        [Key]
+        public int Id { get; set; }
+        public string description { get; set; }
+        public UtilisateurEntity asignee { get; set; }
+        // public List<ExigenceEntity> exigences{ get; set; }
+        public DateTime plannedStartDate { get; set; }
+        public DateTime realStartDate { get; set; }
+        public int cost { get; set; }
+        public TaskEntity requiredTask { get; set; }
     }
 }

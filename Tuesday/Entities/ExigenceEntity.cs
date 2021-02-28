@@ -7,5 +7,6 @@ namespace Tuesday.Entities
 {
     public class ExigenceEntity
     {
+        public int Id { get; set; }
     }
 }
