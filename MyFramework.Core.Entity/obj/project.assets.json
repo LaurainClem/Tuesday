@@ -214,16 +214,6 @@
         "runtime": {
           "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
-      },
-      "MyFramework.Core/1.0.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v2.1",
-        "compile": {
-          "bin/placeholder/MyFramework.Core.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/MyFramework.Core.dll": {}
-        }
       }
     }
   },
@@ -712,17 +702,11 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
-    },
-    "MyFramework.Core/1.0.0": {
-      "type": "project",
-      "path": "../MyFramework.Core/MyFramework.Core.csproj",
-      "msbuildProject": "../MyFramework.Core/MyFramework.Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.1": [
-      "Microsoft.EntityFrameworkCore >= 5.0.3",
-      "MyFramework.Core >= 1.0.0"
+      "Microsoft.EntityFrameworkCore >= 5.0.3"
     ]
   },
   "packageFolders": {
@@ -751,11 +735,7 @@
       "frameworks": {
         "netstandard2.1": {
           "targetAlias": "netstandard2.1",
-          "projectReferences": {
-            "D:\\ESIMED\\Projet .Net\\Tuesday\\MyFramework.Core\\MyFramework.Core.csproj": {
-              "projectPath": "D:\\ESIMED\\Projet .Net\\Tuesday\\MyFramework.Core\\MyFramework.Core.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
