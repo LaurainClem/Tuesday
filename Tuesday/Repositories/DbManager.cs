@@ -11,10 +11,10 @@ namespace Tuesday.Repositories
     {
         public DbManager(DbContextOptions<DbManager> options): base(options) { }
 
-        public DbSet<TacheEntity> TasksContext { get; set; }
+        public DbSet<TaskEntity> TasksContext { get; set; }
         public DbSet<ExigenceEntity> ExigencesContext { get; set; }
         public DbSet<JalonEntity> JalonsContext { get; set; }
-        public DbSet<ProjetEntity> ProjetsContext { get; set; }
-        public DbSet<UtilisateurEntity> UtilisateursContext { get; set; }
+        public DbSet<ProjectEntity> ProjetsContext { get; set; }
+        public DbSet<UserEntity> UtilisateursContext { get; set; }
     }
 }

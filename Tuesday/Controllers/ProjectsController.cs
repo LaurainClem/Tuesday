@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tuesday.Dtos;
 using Tuesday.Entities;
+using Tuesday.Exceptions;
 using Tuesday.Services;
 
 namespace Tuesday.Controllers
@@ -25,26 +26,64 @@ namespace Tuesday.Controllers
         }
 
         [HttpGet]
-        public List<ProjetEntity> Get ()
+        public List<ProjectEntity> FindAll()
         {
-            _logger.LogInformation("Called on Get");
             return _projectService.FindAll();
         }
 
         [HttpGet]
-        public ProjetEntity GetOne(int id)
+        [Route("{id}")]
+        public ProjectEntity FindOne(int id)
         {
-            _logger.LogInformation("Called on GetOne");
-            return _projectService.FindOne(id);
+            try
+            {
+                return _projectService.FindOne(id);
+            } catch (Exception e)
+            {
+                _logger.LogError($"Can't find project with id {id}");
+                throw new HttpNotFoundException();
+            }
         }
 
         [HttpPost]
-        public void Add([FromBody] ProjectDto projectDto)
+        public ProjectEntity Add([FromBody] ProjectDto projectDto)
         {
-            _logger.LogInformation("Called on Post");
-            var project = new ProjetEntity();
-            project.Label = projectDto.Label;
-            _projectService.Add(project);
+            try
+            {
+                var project = new ProjectEntity
+                {
+                    Label = projectDto.Label
+                };
+                return _projectService.Add(project);
+            } catch (Exception e)
+            {
+                throw new HttpInternalErrorException();
+            }
+            
+        }
+
+        [HttpDelete]
+        public List<ProjectEntity> Remove([FromBody]ProjectEntity project)
+        {
+            try
+            {
+                return _projectService.Remove(project);
+            } catch (Exception e)
+            {
+                throw new HttpNotFoundException();
+            }
+        }
+
+        [HttpPatch]
+        public ProjectEntity Update([FromBody] ProjectEntity project)
+        {
+            try
+            {
+                return _projectService.Update(project);
+            } catch (Exception e)
+            {
+                throw new HttpNotFoundException();
+            }
         }
     }
 }

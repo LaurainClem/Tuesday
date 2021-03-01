@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Tuesday.Entities
 {
-    [Table("Projet")]
-    public class ProjetEntity
+    [Table("Project")]
+    public class ProjectEntity
     {
         public int Id { get; set; }
 

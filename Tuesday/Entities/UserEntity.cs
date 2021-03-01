@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -8,7 +11,7 @@ namespace Tuesday.Entities
 {
     [Table("Utilisateur")]
 
-    public class UtilisateurEntity
+    public class UserEntity
     {
         public int Id { get; set; }
         public string LastName { get; set; }

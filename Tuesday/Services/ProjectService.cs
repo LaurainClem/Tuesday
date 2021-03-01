@@ -15,30 +15,37 @@ namespace Tuesday.Services
         {
             _Context = dbManager;
         }
-        public void Add(ProjetEntity entity)
+        public ProjectEntity Add(ProjectEntity entity)
         {
             _Context.ProjetsContext.Add(entity);
             _Context.SaveChanges();
+            return FindOne(entity.Id);
         }
 
-        public List<ProjetEntity> FindAll()
+        public List<ProjectEntity> FindAll()
         {
-            throw new NotImplementedException();
+            return _Context.ProjetsContext.ToList();
         }
 
-        public ProjetEntity FindOne(int id)
+        public ProjectEntity FindOne(int id)
         {
-            throw new NotImplementedException();
+            return _Context.ProjetsContext.Single(project => project.Id == id);
         }
 
-        public ProjetEntity Remove()
+        public List<ProjectEntity> Remove(ProjectEntity entity)
         {
-            throw new NotImplementedException();
+            _Context.ProjetsContext.Remove(entity);
+            _Context.SaveChanges();
+
+            return FindAll();
         }
 
-        public ProjetEntity Update(ProjetEntity entity)
+        public ProjectEntity Update(ProjectEntity entity)
         {
-            throw new NotImplementedException();
+            _Context.ProjetsContext.Update(entity);
+            _Context.SaveChanges();
+            
+            return FindOne(entity.Id);
         }
     }
 }

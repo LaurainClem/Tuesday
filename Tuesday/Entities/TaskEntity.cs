@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace Tuesday.Entities
 {
-    [Table("Tache")]
+    [Table("Task")]
 
-    public class TacheEntity
+    public class TaskEntity
     {
         public string Label { get; set; }
         public int Id { get; set; }
         public string Description { get; set; }
-        public UtilisateurEntity Assignee { get; set; }
+        public UserEntity Assignee { get; set; }
         public List<ExigenceEntity> Exigences{ get; set; }
         public DateTime PlannedStartDate { get; set; }
         public DateTime RealStartDate { get; set; }
         public int Cost { get; set; }
-        public TacheEntity RequiredTask { get; set; }
+        public TaskEntity RequiredTask { get; set; }
     }
 }

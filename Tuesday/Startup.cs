@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tuesday.Exceptions;
 using Tuesday.Repositories;
 using Tuesday.Services;
 
@@ -30,7 +31,7 @@ namespace Tuesday
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
             services.AddSwaggerGen();
             services.AddScoped<IProjectService, ProjectService>();
             string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");

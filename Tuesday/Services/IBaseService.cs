@@ -10,7 +10,7 @@ namespace Tuesday.Services
         T FindOne(int id);
         List<T> FindAll();
         T Update(T entity);
-        T Remove();
-        void Add(T entity);
+        List<T> Remove(T entity);
+        T Add(T entity);
     }
 }

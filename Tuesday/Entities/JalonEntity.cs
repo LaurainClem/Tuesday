@@ -13,7 +13,7 @@ namespace Tuesday.Entities
         public int Id { get; set; }
         public string Label { get; set; }
         public DateTime PlannedStartDate { get; set; }
-        public UtilisateurEntity Assignee { get; set; }
-        public List<TacheEntity> Tasks { get; set; }
+        public UserEntity Assignee { get; set; }
+        public List<TaskEntity> Tasks { get; set; }
     }
 }
