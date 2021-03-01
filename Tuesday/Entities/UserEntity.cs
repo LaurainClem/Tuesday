@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Tuesday.Entities
 {
-    [Table("Utilisateur")]
+    [Table("User")]
 
     public class UserEntity
     {

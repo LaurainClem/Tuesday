@@ -30,16 +30,17 @@ namespace Tuesday.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int?>("TacheEntityId")
+                    b.Property<int?>("TaskEntityId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("JalonId");
 
-                    b.HasIndex("TacheEntityId");
+                    b.HasIndex("TaskEntityId");
 
                     b.ToTable("Exigence");
                 });
@@ -54,38 +55,40 @@ namespace Tuesday.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("PlannedStartDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("ProjetEntityId")
+                    b.Property<int?>("ProjectEntityId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AssigneeId");
 
-                    b.HasIndex("ProjetEntityId");
+                    b.HasIndex("ProjectEntityId");
 
                     b.ToTable("Jalon");
                 });
 
-            modelBuilder.Entity("Tuesday.Entities.ProjetEntity", b =>
+            modelBuilder.Entity("Tuesday.Entities.ProjectEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projet");
+                    b.ToTable("Project");
                 });
 
-            modelBuilder.Entity("Tuesday.Entities.TacheEntity", b =>
+            modelBuilder.Entity("Tuesday.Entities.TaskEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,12 +101,14 @@ namespace Tuesday.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int?>("JalonEntityId")
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("PlannedStartDate")
@@ -123,10 +128,10 @@ namespace Tuesday.Migrations
 
                     b.HasIndex("RequiredTaskId");
 
-                    b.ToTable("Tache");
+                    b.ToTable("Task");
                 });
 
-            modelBuilder.Entity("Tuesday.Entities.UtilisateurEntity", b =>
+            modelBuilder.Entity("Tuesday.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -146,7 +151,7 @@ namespace Tuesday.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Utilisateur");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Tuesday.Entities.ExigenceEntity", b =>
@@ -155,29 +160,29 @@ namespace Tuesday.Migrations
                         .WithMany()
                         .HasForeignKey("JalonId");
 
-                    b.HasOne("Tuesday.Entities.TacheEntity", null)
+                    b.HasOne("Tuesday.Entities.TaskEntity", null)
                         .WithMany("Exigences")
-                        .HasForeignKey("TacheEntityId");
+                        .HasForeignKey("TaskEntityId");
 
                     b.Navigation("Jalon");
                 });
 
             modelBuilder.Entity("Tuesday.Entities.JalonEntity", b =>
                 {
-                    b.HasOne("Tuesday.Entities.UtilisateurEntity", "Assignee")
+                    b.HasOne("Tuesday.Entities.UserEntity", "Assignee")
                         .WithMany()
                         .HasForeignKey("AssigneeId");
 
-                    b.HasOne("Tuesday.Entities.ProjetEntity", null)
+                    b.HasOne("Tuesday.Entities.ProjectEntity", null)
                         .WithMany("Jalons")
-                        .HasForeignKey("ProjetEntityId");
+                        .HasForeignKey("ProjectEntityId");
 
                     b.Navigation("Assignee");
                 });
 
-            modelBuilder.Entity("Tuesday.Entities.TacheEntity", b =>
+            modelBuilder.Entity("Tuesday.Entities.TaskEntity", b =>
                 {
-                    b.HasOne("Tuesday.Entities.UtilisateurEntity", "Assignee")
+                    b.HasOne("Tuesday.Entities.UserEntity", "Assignee")
                         .WithMany()
                         .HasForeignKey("AssigneeId");
 
@@ -185,7 +190,7 @@ namespace Tuesday.Migrations
                         .WithMany("Tasks")
                         .HasForeignKey("JalonEntityId");
 
-                    b.HasOne("Tuesday.Entities.TacheEntity", "RequiredTask")
+                    b.HasOne("Tuesday.Entities.TaskEntity", "RequiredTask")
                         .WithMany()
                         .HasForeignKey("RequiredTaskId");
 
@@ -199,12 +204,12 @@ namespace Tuesday.Migrations
                     b.Navigation("Tasks");
                 });
 
-            modelBuilder.Entity("Tuesday.Entities.ProjetEntity", b =>
+            modelBuilder.Entity("Tuesday.Entities.ProjectEntity", b =>
                 {
                     b.Navigation("Jalons");
                 });
 
-            modelBuilder.Entity("Tuesday.Entities.TacheEntity", b =>
+            modelBuilder.Entity("Tuesday.Entities.TaskEntity", b =>
                 {
                     b.Navigation("Exigences");
                 });

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tuesday.Entities;
+using Tuesday.Exceptions;
 using Tuesday.Repositories;
 
 namespace Tuesday.Services
@@ -29,7 +30,7 @@ namespace Tuesday.Services
 
         public ProjectEntity FindOne(int id)
         {
-            return _Context.ProjetsContext.Single(project => project.Id == id);
+                return _Context.ProjetsContext.Single(project => project.Id == id);
         }
 
         public List<ProjectEntity> Remove(ProjectEntity entity)

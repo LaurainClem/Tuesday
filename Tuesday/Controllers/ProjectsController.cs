@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Threading.Tasks;
 using Tuesday.Dtos;
@@ -28,7 +30,15 @@ namespace Tuesday.Controllers
         [HttpGet]
         public List<ProjectEntity> FindAll()
         {
-            return _projectService.FindAll();
+            try
+            {
+                return _projectService.FindAll();
+            }
+            catch
+            {
+                _logger.LogError("Internal Error while retrieving projects");
+                throw new HttpInternalErrorException();
+            }
         }
 
         [HttpGet]
@@ -38,7 +48,7 @@ namespace Tuesday.Controllers
             try
             {
                 return _projectService.FindOne(id);
-            } catch (Exception e)
+            } catch
             {
                 _logger.LogError($"Can't find project with id {id}");
                 throw new HttpNotFoundException();
@@ -55,9 +65,10 @@ namespace Tuesday.Controllers
                     Label = projectDto.Label
                 };
                 return _projectService.Add(project);
-            } catch (Exception e)
+            } catch (DbUpdateException e)
             {
-                throw new HttpInternalErrorException();
+                _logger.LogError($"Internal error while adding a new project. ");
+                throw new HttpResponseException(400, e.InnerException.Message);
             }
             
         }
@@ -68,8 +79,9 @@ namespace Tuesday.Controllers
             try
             {
                 return _projectService.Remove(project);
-            } catch (Exception e)
+            } catch
             {
+                _logger.LogError($"Can't find project with id {project.Id}");
                 throw new HttpNotFoundException();
             }
         }
@@ -80,8 +92,9 @@ namespace Tuesday.Controllers
             try
             {
                 return _projectService.Update(project);
-            } catch (Exception e)
+            } catch 
             {
+                _logger.LogError($"Can't find project with id {project.Id}");
                 throw new HttpNotFoundException();
             }
         }
