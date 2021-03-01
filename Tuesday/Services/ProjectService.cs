@@ -1,34 +1,42 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tuesday.Entities;
+using Tuesday.Repositories;
 
 namespace Tuesday.Services
 {
     public class ProjectService : IProjectService
     {
-        List<ProjectEntity> projects = new List<ProjectEntity>();
-
-        public List<ProjectEntity> FindAll()
+        private DbManager _Context;
+        public ProjectService(DbManager dbManager)
         {
-            projects.Add(new ProjectEntity("Projet 1"));
-            projects.Add(new ProjectEntity("Projet 2"));
-            projects.Add(new ProjectEntity("Projet 3"));
-            return projects;
+            _Context = dbManager;
+        }
+        public void Add(ProjetEntity entity)
+        {
+            _Context.ProjetsContext.Add(entity);
+            _Context.SaveChanges();
         }
 
-        public ProjectEntity FindOne(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ProjectEntity Remove()
+        public List<ProjetEntity> FindAll()
         {
             throw new NotImplementedException();
         }
 
-        public ProjectEntity Update(ProjectEntity entity)
+        public ProjetEntity FindOne(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ProjetEntity Remove()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ProjetEntity Update(ProjetEntity entity)
         {
             throw new NotImplementedException();
         }

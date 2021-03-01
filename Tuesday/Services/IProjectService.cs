@@ -6,7 +6,7 @@ using Tuesday.Entities;
 
 namespace Tuesday.Services
 {
-    public interface IProjectService : IBaseService<ProjectEntity>
+    public interface IProjectService : IBaseService<ProjetEntity>
     {
         
     }

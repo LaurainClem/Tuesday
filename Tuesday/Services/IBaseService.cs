@@ -11,5 +11,6 @@ namespace Tuesday.Services
         List<T> FindAll();
         T Update(T entity);
         T Remove();
+        void Add(T entity);
     }
 }

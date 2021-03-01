@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace Tuesday.Entities
 {
-    [Table("Jalon")]
-
-    public class JalonEntity
+    [Table("Projet")]
+    public class ProjetEntity
     {
         public int Id { get; set; }
+
         public string Label { get; set; }
-        public DateTime PlannedStartDate { get; set; }
-        public UtilisateurEntity Assignee { get; set; }
-        public List<TacheEntity> Tasks { get; set; }
+
+        public List<JalonEntity> Jalons { get; set; }
     }
 }
