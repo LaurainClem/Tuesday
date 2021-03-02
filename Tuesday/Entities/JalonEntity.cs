@@ -20,5 +20,7 @@ namespace Tuesday.Entities
         public UserEntity Assignee { get; set; }
         [Required]
         public List<TaskEntity> Tasks { get; set; }
+
+        public int ProjectId { get; set; }
     }
 }

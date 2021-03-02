@@ -14,7 +14,5 @@ namespace Tuesday.Entities
 
         [Required]
         public string Label { get; set; }
-
-        public List<JalonEntity> Jalons { get; set; }
     }
 }

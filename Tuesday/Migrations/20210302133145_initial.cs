@@ -9,20 +9,20 @@ namespace Tuesday.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Projet",
+                name: "Project",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Label = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true)
+                    Label = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Projet", x => x.Id);
+                    table.PrimaryKey("PK_Project", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Utilisateur",
+                name: "User",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -34,7 +34,7 @@ namespace Tuesday.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Utilisateur", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,36 +43,36 @@ namespace Tuesday.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Label = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    Label = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
                     PlannedStartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     AssigneeId = table.Column<int>(type: "int", nullable: true),
-                    ProjetEntityId = table.Column<int>(type: "int", nullable: true)
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Jalon", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Jalon_Projet_ProjetEntityId",
-                        column: x => x.ProjetEntityId,
-                        principalTable: "Projet",
+                        name: "FK_Jalon_Project_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Project",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Jalon_Utilisateur_AssigneeId",
+                        name: "FK_Jalon_User_AssigneeId",
                         column: x => x.AssigneeId,
-                        principalTable: "Utilisateur",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tache",
+                name: "Task",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Label = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
-                    Description = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    Label = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
+                    Description = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
                     AssigneeId = table.Column<int>(type: "int", nullable: true),
                     PlannedStartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     RealStartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -82,23 +82,23 @@ namespace Tuesday.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tache", x => x.Id);
+                    table.PrimaryKey("PK_Task", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tache_Jalon_JalonEntityId",
+                        name: "FK_Task_Jalon_JalonEntityId",
                         column: x => x.JalonEntityId,
                         principalTable: "Jalon",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Tache_Tache_RequiredTaskId",
+                        name: "FK_Task_Task_RequiredTaskId",
                         column: x => x.RequiredTaskId,
-                        principalTable: "Tache",
+                        principalTable: "Task",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Tache_Utilisateur_AssigneeId",
+                        name: "FK_Task_User_AssigneeId",
                         column: x => x.AssigneeId,
-                        principalTable: "Utilisateur",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -109,10 +109,10 @@ namespace Tuesday.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Label = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    Label = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
                     JalonId = table.Column<int>(type: "int", nullable: true),
                     ExigenceType = table.Column<int>(type: "int", nullable: false),
-                    TacheEntityId = table.Column<int>(type: "int", nullable: true)
+                    TaskEntityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -124,9 +124,9 @@ namespace Tuesday.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Exigence_Tache_TacheEntityId",
-                        column: x => x.TacheEntityId,
-                        principalTable: "Tache",
+                        name: "FK_Exigence_Task_TaskEntityId",
+                        column: x => x.TaskEntityId,
+                        principalTable: "Task",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -137,9 +137,9 @@ namespace Tuesday.Migrations
                 column: "JalonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exigence_TacheEntityId",
+                name: "IX_Exigence_TaskEntityId",
                 table: "Exigence",
-                column: "TacheEntityId");
+                column: "TaskEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Jalon_AssigneeId",
@@ -147,23 +147,23 @@ namespace Tuesday.Migrations
                 column: "AssigneeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jalon_ProjetEntityId",
+                name: "IX_Jalon_ProjectId",
                 table: "Jalon",
-                column: "ProjetEntityId");
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tache_AssigneeId",
-                table: "Tache",
+                name: "IX_Task_AssigneeId",
+                table: "Task",
                 column: "AssigneeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tache_JalonEntityId",
-                table: "Tache",
+                name: "IX_Task_JalonEntityId",
+                table: "Task",
                 column: "JalonEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tache_RequiredTaskId",
-                table: "Tache",
+                name: "IX_Task_RequiredTaskId",
+                table: "Task",
                 column: "RequiredTaskId");
         }
 
@@ -173,16 +173,16 @@ namespace Tuesday.Migrations
                 name: "Exigence");
 
             migrationBuilder.DropTable(
-                name: "Tache");
+                name: "Task");
 
             migrationBuilder.DropTable(
                 name: "Jalon");
 
             migrationBuilder.DropTable(
-                name: "Projet");
+                name: "Project");
 
             migrationBuilder.DropTable(
-                name: "Utilisateur");
+                name: "User");
         }
     }
 }

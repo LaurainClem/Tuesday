@@ -16,5 +16,13 @@ namespace Tuesday.Repositories
         public DbSet<JalonEntity> JalonsContext { get; set; }
         public DbSet<ProjectEntity> ProjetsContext { get; set; }
         public DbSet<UserEntity> UtilisateursContext { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<JalonEntity>()
+                .HasOne<ProjectEntity>()
+                .WithMany()
+                .HasForeignKey(jalon => jalon.ProjectId);
+        }
     }
 }

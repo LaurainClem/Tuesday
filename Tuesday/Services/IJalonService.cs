@@ -6,8 +6,8 @@ using Tuesday.Entities;
 
 namespace Tuesday.Services
 {
-    public interface IProjectService : IBaseService<ProjectEntity>
+    public interface IJalonService : IDependantBaseService<JalonEntity>
     {
-        public bool IsProjectExist(int idProject);
+        public bool IsJalonExist(int idJalon);
     }
 }

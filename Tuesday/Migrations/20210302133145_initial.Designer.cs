@@ -9,8 +9,8 @@ using Tuesday.Repositories;
 namespace Tuesday.Migrations
 {
     [DbContext(typeof(DbManager))]
-    [Migration("20210301193750_renameEntities")]
-    partial class renameEntities
+    [Migration("20210302133145_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,6 +32,7 @@ namespace Tuesday.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int?>("TaskEntityId")
@@ -56,19 +57,20 @@ namespace Tuesday.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("PlannedStartDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("ProjectEntityId")
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AssigneeId");
 
-                    b.HasIndex("ProjectEntityId");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Jalon");
                 });
@@ -80,6 +82,7 @@ namespace Tuesday.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
@@ -100,12 +103,14 @@ namespace Tuesday.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int?>("JalonEntityId")
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("PlannedStartDate")
@@ -148,7 +153,7 @@ namespace Tuesday.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Utilisateur");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Tuesday.Entities.ExigenceEntity", b =>
@@ -171,8 +176,10 @@ namespace Tuesday.Migrations
                         .HasForeignKey("AssigneeId");
 
                     b.HasOne("Tuesday.Entities.ProjectEntity", null)
-                        .WithMany("Jalons")
-                        .HasForeignKey("ProjectEntityId");
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Assignee");
                 });
@@ -199,11 +206,6 @@ namespace Tuesday.Migrations
             modelBuilder.Entity("Tuesday.Entities.JalonEntity", b =>
                 {
                     b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("Tuesday.Entities.ProjectEntity", b =>
-                {
-                    b.Navigation("Jalons");
                 });
 
             modelBuilder.Entity("Tuesday.Entities.TaskEntity", b =>

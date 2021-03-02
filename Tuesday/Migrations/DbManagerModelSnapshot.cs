@@ -61,14 +61,14 @@ namespace Tuesday.Migrations
                     b.Property<DateTime>("PlannedStartDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("ProjectEntityId")
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AssigneeId");
 
-                    b.HasIndex("ProjectEntityId");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Jalon");
                 });
@@ -174,8 +174,10 @@ namespace Tuesday.Migrations
                         .HasForeignKey("AssigneeId");
 
                     b.HasOne("Tuesday.Entities.ProjectEntity", null)
-                        .WithMany("Jalons")
-                        .HasForeignKey("ProjectEntityId");
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Assignee");
                 });
@@ -202,11 +204,6 @@ namespace Tuesday.Migrations
             modelBuilder.Entity("Tuesday.Entities.JalonEntity", b =>
                 {
                     b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("Tuesday.Entities.ProjectEntity", b =>
-                {
-                    b.Navigation("Jalons");
                 });
 
             modelBuilder.Entity("Tuesday.Entities.TaskEntity", b =>
