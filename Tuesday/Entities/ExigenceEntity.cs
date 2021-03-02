@@ -13,7 +13,8 @@ namespace Tuesday.Entities
         public int Id { get; set; }
         [Required]
         public string Label { get; set; }
-        public JalonEntity Jalon { get; set; }
+        [Required]
+        public int JalonId { get; set; }
         [Required]
         public ExigenceType ExigenceType { get; set; }
     }

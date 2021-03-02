@@ -23,6 +23,11 @@ namespace Tuesday.Repositories
                 .HasOne<ProjectEntity>()
                 .WithMany()
                 .HasForeignKey(jalon => jalon.ProjectId);
+
+            modelBuilder.Entity<ExigenceEntity>()
+                .HasOne<JalonEntity>()
+                .WithMany()
+                .HasForeignKey(exigence => exigence.ExigenceId);
         }
     }
 }

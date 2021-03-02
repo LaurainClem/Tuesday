@@ -83,9 +83,16 @@ namespace Tuesday.Services
             }
         }
 
-        public bool IsJalonExist(int idJalon)
+        public bool IsJalonExist(int idJalon, int idProject)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return FindOne(idJalon, idProject) != null;
+            }
+            catch
+            {
+                throw new HttpNotFoundException();
+            }
         }
 
         public List<JalonEntity> Remove(JalonEntity entity, int idParent)
