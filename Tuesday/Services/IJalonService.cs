@@ -7,8 +7,7 @@ using Tuesday.Entities;
 
 namespace Tuesday.Services
 {
-    public interface IJalonService : IDependantBaseService<JalonEntity>
+    public interface IJalonService : IBaseService<JalonEntity>
     {
-        public bool IsJalonExist(int idJalon, int idParent);
     }
 }

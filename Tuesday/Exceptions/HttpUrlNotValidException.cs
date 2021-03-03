@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Tuesday.Exceptions
 {
-    public class HttpInternalErrorException : HttpResponseException
+    public class HttpUrlNotValidException : HttpResponseException
     {
-        public HttpInternalErrorException(string value) : base(500, value)
+        public HttpUrlNotValidException() : base(400, "Url not valid")
         {
         }
     }

@@ -17,7 +17,7 @@ namespace Tuesday.Controllers
     {
         private readonly IJalonService _jalonService;
 
-        public JalonsController(ILogger<JalonsController> logger, IJalonService jalonService)
+        public JalonsController(IJalonService jalonService)
         {
             _jalonService = jalonService;
         }
@@ -25,14 +25,16 @@ namespace Tuesday.Controllers
         [HttpGet]
         public List<JalonEntity> FindAll(int idProject)
         {
-            return _jalonService.FindAll(idProject);
+            UrlConfig config = new UrlConfig() { IdProject = idProject };
+            return _jalonService.FindAll(config);
         }
 
         [HttpGet]
         [Route("{idJalon}")]
         public JalonEntity FindOne(int idProject, int idJalon)
         {
-            return _jalonService.FindOne(idJalon, idProject);
+            UrlConfig config = new UrlConfig() { IdProject = idProject, IdJalon = idJalon };
+            return _jalonService.FindOne(config);
         }
 
         [HttpPost]
@@ -40,24 +42,44 @@ namespace Tuesday.Controllers
         {
             JalonEntity jalon = new JalonEntity()
             {
-                Assignee = jalonDto.Assignee,
+                AssigneeId = jalonDto.AssigneeId,
                 Label = jalonDto.Label,
                 PlannedStartDate = jalonDto.PlannedStartDate,
-                Tasks = jalonDto.Tasks
+                Tasks = jalonDto.Tasks,
+                ProjectId = idProject
             };
-            return _jalonService.Add(jalon, idProject);
+            UrlConfig config = new UrlConfig() { IdProject = idProject };
+            return _jalonService.Add(jalon, config);
         }
 
         [HttpPatch]
-        public JalonEntity Update([FromBody] JalonEntity jalon, int idProject)
+        [Route("{idJalon}")]
+        public JalonEntity Update([FromBody] JalonDto jalonDto, int idProject, int idJalon)
         {
-            return _jalonService.Update(jalon, idProject);
+            UrlConfig config = new UrlConfig() { IdProject = idProject, IdJalon = idJalon };
+            try
+            {
+                JalonEntity jalon = _jalonService.FindOne(config);
+                jalon.AssigneeId = jalonDto.AssigneeId != 0 ? jalonDto.AssigneeId : jalon.AssigneeId;
+                jalon.Label = jalonDto.Label != null ? jalonDto.Label : jalon.Label;
+                jalon.PlannedStartDate = jalonDto.PlannedStartDate != new DateTime() ? jalonDto.PlannedStartDate : jalon.PlannedStartDate;
+                jalon.Tasks = jalonDto.Tasks != null ? jalonDto.Tasks : jalon.Tasks;
+                return _jalonService.Update(jalon, config);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         [HttpDelete]
-        public List<JalonEntity> Remove([FromBody] JalonEntity jalon, int idProject)
+        [Route("{idJalon}")]
+        public List<JalonEntity> Remove(int idProject, int idJalon)
         {
-            return _jalonService.Remove(jalon, idProject);
+            UrlConfig config = new UrlConfig() { IdProject = idProject, IdJalon = idJalon };
+            return _jalonService.Remove(config);
         }
     }
+
+
 }

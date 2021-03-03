@@ -13,114 +13,100 @@ namespace Tuesday.Services
     public class JalonService : IJalonService
     {
         private DbManager _DbManager;
-        private IProjectService _ProjectService;
         private ILogger<ProjectService> __logger;
+        private IConsistencyChecker _ConsistencyChecker;
 
-        public JalonService(DbManager dbManager, IProjectService projectService, ILogger<ProjectService> logger)
+        public JalonService(DbManager dbManager, ILogger<ProjectService> logger, IConsistencyChecker consistencyChecker)
         {
             _DbManager = dbManager;
-            _ProjectService = projectService;
             __logger = logger;
+            _ConsistencyChecker = consistencyChecker;
         }
 
-        public JalonEntity Add(JalonEntity entity, int idParent)
+        public JalonEntity Add(JalonEntity entity, UrlConfig config)
         {
-            if (_ProjectService.IsProjectExist(idParent))
+            if(_ConsistencyChecker.IsUrlValid(config))
             {
                 try
                 {
-                    entity.ProjectId = idParent;
                     _DbManager.JalonsContext.Add(entity);
                     _DbManager.SaveChanges();
                     return entity;
                 } catch
                 {
-                    __logger.LogInformation($"Error occured while trying to add {entity}");
-                    throw new HttpInternalErrorException();
+                    __logger.LogError($"Error while trying to add {entity}");
+                    throw new HttpInternalErrorException($"Error while trying to add {entity}");
                 }
             } else
             {
-                __logger.LogInformation($"Error occured while trying to retrieve project {idParent}");
-                throw new HttpNotFoundException();
+                throw new HttpUrlNotValidException();
             }
         }
 
-        public List<JalonEntity> FindAll(int idParent)
+        public List<JalonEntity> FindAll(UrlConfig config)
         {
-            if (_ProjectService.IsProjectExist(idParent))
+            if (_ConsistencyChecker.IsUrlValid(config))
             {
                 try
                 {
-                    return _DbManager.JalonsContext.Where(jalon => jalon.ProjectId == idParent).ToList();
-                } catch
+                    return _DbManager.JalonsContext.Where(jalon => jalon.ProjectId == config.IdProject).ToList();
+                }
+                catch
                 {
-                    __logger.LogInformation($"Error occured while trying find Jalons of project {idParent}");
-                    throw new HttpInternalErrorException();
+                    __logger.LogError("Error while trying to retrieve jalons");
+                    throw new HttpInternalErrorException("Error while trying to retrieve jalons");
                 }
             } else
             {
-                __logger.LogInformation($"Error occured while trying to retrieve project {idParent}");
-                throw new HttpNotFoundException();
+                throw new HttpUrlNotValidException();
             }
         }
 
-        public JalonEntity FindOne(int id, int idParent)
+        public JalonEntity FindOne(UrlConfig config)
         {
-            if (_ProjectService.IsProjectExist(idParent))
+           if(_ConsistencyChecker.IsUrlValid(config))
             {
                 try
                 {
-                    return _DbManager.JalonsContext.Find(id);
-                } catch
+                    return _DbManager.JalonsContext.Find(config.IdJalon);
+                }
+                catch
                 {
-                    __logger.LogInformation($"Error occured while trying find Jalons ${id} of project {idParent}");
+                    __logger.LogError($"Error while trying to retrieve jalon ${config.IdJalon} in project ${config.IdProject}");
                     throw new HttpNotFoundException();
                 }
             } else
             {
-                __logger.LogInformation($"Error occured while trying to retrieve project {idParent}");
-                throw new HttpNotFoundException();
+                throw new HttpUrlNotValidException();
             }
         }
 
-        public bool IsJalonExist(int idJalon, int idProject)
+        public List<JalonEntity> Remove(UrlConfig config)
         {
-            try
-            {
-                return FindOne(idJalon, idProject) != null;
-            }
-            catch
-            {
-                throw new HttpNotFoundException();
-            }
-        }
-
-        public List<JalonEntity> Remove(JalonEntity entity, int idParent)
-        {
-            if (_ProjectService.IsProjectExist(idParent))
+            if (_ConsistencyChecker.IsUrlValid(config))
             {
                 try
                 {
-                    _DbManager.JalonsContext.Remove(entity);
+                    _DbManager.JalonsContext.Remove(FindOne(config));
                     _DbManager.SaveChanges();
-                    return FindAll(idParent);
+                    config.IdJalon = 0;
+                    return FindAll(config);
                 }
-                catch
+                catch (Exception e)
                 {
-                    __logger.LogInformation($"Error occured while trying to remove {entity} of project {idParent}");
-                    throw new HttpInternalErrorException();
+                    Console.WriteLine(e);
+                    __logger.LogError($"Error while trying to remove jalon ${config.IdJalon} of project {config.IdProject}");
+                    throw new HttpInternalErrorException($"Error while trying to remove jalon ${config.IdJalon} of project {config.IdProject}");
                 }
-            }
-            else
+            } else
             {
-                __logger.LogInformation($"Error occured while trying to retrieve project {idParent}");
-                throw new HttpNotFoundException();
+                throw new HttpUrlNotValidException();
             }
         }
 
-        public JalonEntity Update(JalonEntity entity, int idParent)
+        public JalonEntity Update(JalonEntity entity, UrlConfig config)
         {
-            if (_ProjectService.IsProjectExist(idParent))
+            if (_ConsistencyChecker.IsUrlValid(config))
             {
                 try
                 {
@@ -130,14 +116,12 @@ namespace Tuesday.Services
                 }
                 catch
                 {
-                    __logger.LogInformation($"Error occured while trying to update {entity} of project {idParent}");
-                    throw new HttpInternalErrorException();
+                    __logger.LogError($"Error while trying to update project ${config.IdJalon}");
+                    throw new HttpInternalErrorException($"Error while trying to update project ${config.IdJalon}");
                 }
-            }
-            else
+            } else
             {
-                __logger.LogInformation($"Error occured while trying to retrieve project {idParent}");
-                throw new HttpNotFoundException();
+                throw new HttpUrlNotValidException();
             }
         }
 

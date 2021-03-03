@@ -28,14 +28,16 @@ namespace Tuesday.Controllers
         [HttpGet]
         public List<ProjectEntity> FindAll()
         {
-            return _projectService.FindAll();
+            UrlConfig config = new UrlConfig();
+            return _projectService.FindAll(config);
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public ProjectEntity FindOne(int id)
+        [Route("{idProject}")]
+        public ProjectEntity FindOne(int idProject)
         {
-            return _projectService.FindOne(id);
+            UrlConfig config = new UrlConfig() { IdProject = idProject };
+            return _projectService.FindOne(config);
         }
 
         [HttpPost]
@@ -45,19 +47,33 @@ namespace Tuesday.Controllers
             {
                 Label = projectDto.Label
             };
-            return _projectService.Add(project);            
+            UrlConfig config = new UrlConfig();
+
+            return _projectService.Add(project, config);            
         }
 
         [HttpDelete]
-        public List<ProjectEntity> Remove([FromBody]ProjectEntity project)
+        [Route("{idProject}")]
+        public List<ProjectEntity> Remove(int idProject)
         {
-            return _projectService.Remove(project);
+            UrlConfig config = new UrlConfig() { IdProject = idProject };
+            return _projectService.Remove(config);
         }
 
         [HttpPatch]
-        public ProjectEntity Update([FromBody] ProjectEntity project)
+        [Route("{idProject}")]
+        public ProjectEntity Update([FromBody] ProjectDto projectDto, int idProject)
         {
-            return _projectService.Update(project);
+            UrlConfig config = new UrlConfig() { IdProject = idProject };
+            try
+            {
+                ProjectEntity entity = _projectService.FindOne(config);
+                entity.Label = projectDto.Label != null ? projectDto.Label : entity.Label;
+                return _projectService.Update(entity, config);
+            } catch
+            {
+                throw;
+            }
         }
     }
 }

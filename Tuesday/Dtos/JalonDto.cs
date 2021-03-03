@@ -10,7 +10,7 @@ namespace Tuesday.Dtos
     {
         public string Label { get; set; }
         public DateTime PlannedStartDate { get; set; }
-        public UserEntity Assignee { get; set; }
+        public int AssigneeId { get; set; }
         public List<TaskEntity> Tasks { get; set; }
     }
 }

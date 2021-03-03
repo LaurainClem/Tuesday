@@ -7,10 +7,10 @@ namespace Tuesday.Services
 {
     public interface IBaseService<T> where T : class
     {
-        T FindOne(int id);
-        List<T> FindAll();
-        T Update(T entity);
-        List<T> Remove(T entity);
-        T Add(T entity);
+        T FindOne(UrlConfig config);
+        List<T> FindAll(UrlConfig config);
+        T Update(T entity, UrlConfig config);
+        List<T> Remove(UrlConfig config);
+        T Add(T entity, UrlConfig config);
     }
 }

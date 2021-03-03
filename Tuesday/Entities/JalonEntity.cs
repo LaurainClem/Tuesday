@@ -17,9 +17,7 @@ namespace Tuesday.Entities
         [Required]
         public DateTime PlannedStartDate { get; set; }
         [Required]
-        public UserEntity Assignee { get; set; }
-        [Required]
-        public List<TaskEntity> Tasks { get; set; }
+        public int AssigneeId { get; set; }
         [Required]
         public int ProjectId { get; set; }
     }

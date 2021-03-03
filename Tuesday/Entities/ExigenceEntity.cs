@@ -14,9 +14,11 @@ namespace Tuesday.Entities
         [Required]
         public string Label { get; set; }
         [Required]
-        public int JalonId { get; set; }
+        public int ProjectId { get; set; }
+        public int JalonID { get; set; }
         [Required]
         public ExigenceType ExigenceType { get; set; }
+        public List<TaskEntity> Tasks { get; set; }
     }
 
     public enum ExigenceType

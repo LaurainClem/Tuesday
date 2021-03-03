@@ -21,40 +21,45 @@ namespace Tuesday.Controllers
         }
 
         [HttpGet]
-        public List<ExigenceEntity> FindAll(int idJalon)
+        public List<ExigenceEntity> FindAll(int idJalon, int idProject)
         {
-            return _exigenceService.FindAll(idJalon);
+            UrlConfig config = new UrlConfig() { IdProject = idProject, IdJalon = idJalon};
+            return _exigenceService.FindAll(config);
         }
 
         [HttpGet]
         [Route("{idExigence}")]
-        public ExigenceEntity FindOne(int idJalon, int idExigence)
+        public ExigenceEntity FindOne(int idJalon, int idExigence, int idProject)
         {
-            return _exigenceService.FindOne(idExigence, idJalon);
+            UrlConfig config = new UrlConfig() { IdProject = idProject, IdJalon = idJalon, IdExigence = idExigence };
+            return _exigenceService.FindOne(config);
         }
 
         [HttpPost]
-        public ExigenceEntity Add([FromBody] ExigenceDto exigenceDto, int idJalon)
+        public ExigenceEntity Add([FromBody] ExigenceDto exigenceDto, int idJalon, int idProject)
         {
             ExigenceEntity exigence = new ExigenceEntity()
             {
                 Label = exigenceDto.Label,
-                ExigenceId = exigenceDto.ExigenceId,
+                ProjectId = idProject,
                 ExigenceType = exigenceDto.ExigenceType,
             };
-            return _exigenceService.Add(exigence, idJalon);
+            UrlConfig config = new UrlConfig() { IdProject = idProject, IdJalon = idJalon };
+            return _exigenceService.Add(exigence, config);
         }
 
         [HttpPatch]
-        public ExigenceEntity Update([FromBody] ExigenceEntity exigence, int idJalon)
+        public ExigenceEntity Update([FromBody] ExigenceEntity exigence, int idJalon, int idProject)
         {
-            return _exigenceService.Update(exigence, idJalon);
+            UrlConfig config = new UrlConfig() { IdProject = idProject, IdJalon = idJalon };
+            return _exigenceService.Update(exigence, config);
         }
 
         [HttpDelete]
-        public List<ExigenceEntity> Remove([FromBody] ExigenceEntity exigence, int idJalon)
+        public List<ExigenceEntity> Remove([FromBody] ExigenceEntity exigence, int idJalon, int idProject)
         {
-            return _exigenceService.Remove(exigence, idJalon);
+            UrlConfig config = new UrlConfig() { IdProject = idProject, IdJalon = idJalon };
+            return _exigenceService.Remove(config);
         }
     }
 }

@@ -33,6 +33,7 @@ namespace Tuesday
         {
             services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
             services.AddSwaggerGen();
+            services.AddScoped<IConsistencyChecker, ConsistencyChecker>();
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IJalonService, JalonService>();
             string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
