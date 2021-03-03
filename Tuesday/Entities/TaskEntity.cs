@@ -23,8 +23,12 @@ namespace Tuesday.Entities
         [Required]
         public DateTime PlannedStartDate { get; set; }
         public DateTime RealStartDate { get; set; }
+        public DateTime RealEndDate { get; set; }
         [Required]
         public int Cost { get; set; }
         public TaskEntity RequiredTask { get; set; }
+
+        [Required]
+        public int JalonId { get; set; }
     }
 }

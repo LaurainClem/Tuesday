@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,34 +11,33 @@ using Tuesday.Repositories;
 
 namespace Tuesday.Services
 {
-    public class ExigenceService : IExigenceService
+    public class TaskService : ITaskService
     {
-
         private DbManager _DbManager;
-        private ILogger<ExigenceService> __logger;
-        private readonly IConsistencyChecker _ConsistencyChecker;
+        private ILogger<TaskService> __logger;
+        private IConsistencyChecker _ConsistencyChecker;
 
-        public ExigenceService(DbManager dbManager, ILogger<ExigenceService> logger, IConsistencyChecker consistencyChecker)
+        public TaskService(DbManager dbManager, ILogger<TaskService> logger, IConsistencyChecker consistencyChecker)
         {
             _DbManager = dbManager;
             __logger = logger;
             _ConsistencyChecker = consistencyChecker;
         }
-        public ExigenceEntity Add(ExigenceEntity entity, UrlConfig config)
+
+        public TaskEntity Add(TaskEntity entity, UrlConfig config)
         {
             if (_ConsistencyChecker.IsUrlValid(config))
             {
                 try
                 {
-                    entity.ProjectId = config.IdProject;
-                    _DbManager.ExigencesContext.Add(entity);
+                    _DbManager.TasksContext.Add(entity);
                     _DbManager.SaveChanges();
                     return entity;
                 }
                 catch
                 {
-                    __logger.LogInformation($"Error occured while trying to add {entity}");
-                    throw new HttpInternalErrorException($"Error occured while trying to add {entity}");
+                    __logger.LogError($"Error while trying to add {entity}");
+                    throw new HttpInternalErrorException($"Error while trying to add {entity}");
                 }
             }
             else
@@ -46,18 +46,18 @@ namespace Tuesday.Services
             }
         }
 
-        public List<ExigenceEntity> FindAll(UrlConfig config)
+        public List<TaskEntity> FindAll(UrlConfig config)
         {
             if (_ConsistencyChecker.IsUrlValid(config))
             {
                 try
                 {
-                    return _DbManager.ExigencesContext.Where(exigence => exigence.ProjectId == config.IdProject).ToList();
+                    return _DbManager.TasksContext.Where(task => task.JalonId == config.IdJalon).ToList();
                 }
                 catch
                 {
-                    __logger.LogInformation($"Error occured while trying find Exigences of project {config.IdProject}");
-                    throw new HttpInternalErrorException($"Error occured while trying find Exigences of project {config.IdProject}");
+                    __logger.LogError("Error while trying to retrieve tasks");
+                    throw new HttpInternalErrorException("Error while trying to retrieve tasks");
                 }
             }
             else
@@ -66,17 +66,17 @@ namespace Tuesday.Services
             }
         }
 
-        public ExigenceEntity FindOne(UrlConfig config)
+        public TaskEntity FindOne(UrlConfig config)
         {
             if (_ConsistencyChecker.IsUrlValid(config))
             {
                 try
                 {
-                    return _DbManager.ExigencesContext.Find(config.IdExigence);
+                    return _DbManager.TasksContext.Find(config.IdTask);
                 }
                 catch
                 {
-                    __logger.LogInformation($"Error occured while trying find Exigence ${config.IdExigence} of Jalon {config.IdJalon}");
+                    __logger.LogError($"Error while trying to retrieve task {config.IdJalon} in jalon {config.IdJalon}");
                     throw new HttpNotFoundException();
                 }
             }
@@ -86,20 +86,21 @@ namespace Tuesday.Services
             }
         }
 
-        public List<ExigenceEntity> Remove(UrlConfig config)
+        public List<TaskEntity> Remove(UrlConfig config)
         {
             if (_ConsistencyChecker.IsUrlValid(config))
             {
                 try
                 {
-                    _DbManager.ExigencesContext.Remove(FindOne(config));
+                    _DbManager.TasksContext.Remove(FindOne(config));
                     _DbManager.SaveChanges();
+                    config.IdTask = 0;
                     return FindAll(config);
                 }
                 catch
                 {
-                    __logger.LogInformation($"Error occured while trying to remove exigence with id {config.IdExigence} of project {config.IdProject}");
-                    throw new HttpInternalErrorException($"Error occured while trying to remove exigence with id {config.IdExigence} of project {config.IdProject}");
+                    __logger.LogError($"Error while trying to remove task {config.IdTask} of jalon {config.IdJalon}");
+                    throw new HttpInternalErrorException($"Error while trying to remove task {config.IdTask} of jalon {config.IdJalon}");
                 }
             }
             else
@@ -108,20 +109,20 @@ namespace Tuesday.Services
             }
         }
 
-        public ExigenceEntity Update(ExigenceEntity entity, UrlConfig config)
+        public TaskEntity Update(TaskEntity entity, UrlConfig config)
         {
             if (_ConsistencyChecker.IsUrlValid(config))
             {
                 try
                 {
-                    _DbManager.ExigencesContext.Update(entity);
+                    _DbManager.TasksContext.Update(entity);
                     _DbManager.SaveChanges();
                     return entity;
                 }
                 catch
                 {
-                    __logger.LogInformation($"Error occured while trying to update {entity} of jalon {config.IdJalon}");
-                    throw new HttpInternalErrorException($"Error occured while trying to update {entity} of jalon {config.IdJalon}");
+                    __logger.LogError($"Error while trying to update task {config.IdTask}");
+                    throw new HttpInternalErrorException($"Error while trying to update task {config.IdTask}");
                 }
             }
             else

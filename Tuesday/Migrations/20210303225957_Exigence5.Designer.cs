@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tuesday.Repositories;
 
 namespace Tuesday.Migrations
 {
     [DbContext(typeof(DbManager))]
-    partial class DbManagerModelSnapshot : ModelSnapshot
+    [Migration("20210303225957_Exigence5")]
+    partial class Exigence5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,16 +38,11 @@ namespace Tuesday.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TaskEntityId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("JalonID");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("TaskEntityId");
 
                     b.ToTable("Exigence");
                 });
@@ -137,6 +134,21 @@ namespace Tuesday.Migrations
                     b.ToTable("Task");
                 });
 
+            modelBuilder.Entity("Tuesday.Entities.TaskExigence", b =>
+                {
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExigenceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TaskId", "ExigenceId");
+
+                    b.HasIndex("ExigenceId");
+
+                    b.ToTable("TaskExigence");
+                });
+
             modelBuilder.Entity("Tuesday.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -171,10 +183,6 @@ namespace Tuesday.Migrations
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Tuesday.Entities.TaskEntity", null)
-                        .WithMany("Exigences")
-                        .HasForeignKey("TaskEntityId");
                 });
 
             modelBuilder.Entity("Tuesday.Entities.JalonEntity", b =>
@@ -207,9 +215,33 @@ namespace Tuesday.Migrations
                     b.Navigation("RequiredTask");
                 });
 
+            modelBuilder.Entity("Tuesday.Entities.TaskExigence", b =>
+                {
+                    b.HasOne("Tuesday.Entities.ExigenceEntity", "Exigence")
+                        .WithMany("TaskExigences")
+                        .HasForeignKey("ExigenceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tuesday.Entities.TaskEntity", "Task")
+                        .WithMany("TaskExigences")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exigence");
+
+                    b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("Tuesday.Entities.ExigenceEntity", b =>
+                {
+                    b.Navigation("TaskExigences");
+                });
+
             modelBuilder.Entity("Tuesday.Entities.TaskEntity", b =>
                 {
-                    b.Navigation("Exigences");
+                    b.Navigation("TaskExigences");
                 });
 #pragma warning restore 612, 618
         }

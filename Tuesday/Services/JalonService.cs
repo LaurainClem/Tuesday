@@ -92,9 +92,8 @@ namespace Tuesday.Services
                     config.IdJalon = 0;
                     return FindAll(config);
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
+                catch 
+                {   
                     __logger.LogError($"Error while trying to remove jalon ${config.IdJalon} of project {config.IdProject}");
                     throw new HttpInternalErrorException($"Error while trying to remove jalon ${config.IdJalon} of project {config.IdProject}");
                 }

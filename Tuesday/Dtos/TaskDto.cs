@@ -14,7 +14,8 @@ namespace Tuesday.Dtos
         public List<ExigenceEntity> Exigences { get; set; }
         public DateTime PlannedStartDate { get; set; }
         public DateTime RealStartDate { get; set; }
+        public DateTime RealEndDate { get; set; }
         public int Cost { get; set; }
-        public int RequiredTaskId { get; set; }
+        public TaskEntity RequiredTaskId { get; set; }
     }
 }

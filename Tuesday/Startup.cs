@@ -36,6 +36,8 @@ namespace Tuesday
             services.AddScoped<IConsistencyChecker, ConsistencyChecker>();
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IJalonService, JalonService>();
+            services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<IExigenceService, ExigenceService>();
             string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DbManager>(options => options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
         }

@@ -43,6 +43,17 @@ namespace Tuesday.Repositories
                 .HasOne<UserEntity>()
                 .WithMany()
                 .HasForeignKey(task => task.AssigneeId);
+            /*
+            modelBuilder.Entity<TaskExigence>()
+                .HasKey(taskEntity => new { taskEntity.TaskId, taskEntity.ExigenceId });
+            modelBuilder.Entity<TaskExigence>()
+                .HasOne(taskEntity => taskEntity.Task)
+                .WithMany(task => task.TaskExigences)
+                .HasForeignKey(taskEntity => taskEntity.TaskId);
+            modelBuilder.Entity<TaskExigence>()
+                .HasOne(taskEntity => taskEntity.Exigence)
+                .WithMany(task => task.TaskExigences)
+                .HasForeignKey(taskEntity => taskEntity.ExigenceId); */
         }
     }
 }
