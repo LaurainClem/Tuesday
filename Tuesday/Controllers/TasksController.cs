@@ -44,13 +44,18 @@ namespace Tuesday.Controllers
                 AssigneeId = taskDto.AssigneeId,
                 Label = taskDto.Label,
                 PlannedStartDate = taskDto.PlannedStartDate,
+                PlannedEndDate = taskDto.PlannedStartDate.AddDays(taskDto.Cost),
+                RealStartDate = taskDto.RealStartDate,
+                RealEndDate = taskDto.RealEndDate,
                 Cost = taskDto.Cost,
                 Description = taskDto.Description,
                 Exigences = taskDto.Exigences,
                 JalonId = idJalon,
                 RequiredTask = taskDto.RequiredTaskId,
             };
-            UrlConfig config = new UrlConfig() { IdProject = idProject };
+
+
+            UrlConfig config = new UrlConfig() { IdProject = idProject, IdJalon = idJalon };
             return _TaskService.Add(task, config);
         }
 
@@ -66,6 +71,7 @@ namespace Tuesday.Controllers
                     task.AssigneeId = taskDto.AssigneeId != 0 ? taskDto.AssigneeId : task.AssigneeId;
                     task.Label = taskDto.Label != null ? taskDto.Label : task.Label;
                     task.PlannedStartDate = taskDto.PlannedStartDate != new DateTime() ? taskDto.PlannedStartDate : task.PlannedStartDate;
+                    task.PlannedEndDate = taskDto.PlannedStartDate.AddDays(taskDto.Cost);
                     task.Cost = taskDto.Cost != 0 ? taskDto.Cost : task.Cost;
                     task.Description = taskDto.Description != null ? taskDto.Description : task.Description;
                     task.Exigences = taskDto.Exigences != null ? taskDto.Exigences : task.Exigences;
@@ -73,6 +79,18 @@ namespace Tuesday.Controllers
                     task.RealStartDate = taskDto.RealStartDate != new DateTime() ? taskDto.RealStartDate : task.RealStartDate;
                     task.RealEndDate = taskDto.RealEndDate != new DateTime() ? taskDto.RealEndDate : task.RealEndDate;
 
+                    if (taskDto.RealEndDate != new DateTime())
+                    {
+                        task.RealEndDate = taskDto.RealEndDate;
+                        if (taskDto.RealStartDate == new DateTime())
+                        {
+                            task.RealStartDate = task.RealEndDate;
+                        }
+                        else
+                        {
+                            task.RealStartDate = taskDto.RealStartDate;
+                        }
+                    }
                     return _TaskService.Update(task, config);
                 } else
                 {

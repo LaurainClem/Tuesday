@@ -124,5 +124,25 @@ namespace Tuesday.Services
             }
         }
 
+        public void UpdateProject(UrlConfig config)
+        {
+            try
+            {
+                ProjectEntity project = _DbManager.ProjetsContext.Find(config.IdProject);
+                project.PlannedStartDate = _DbManager.JalonsContext.Where(p => p.ProjectId == config.IdProject).OrderBy(p => p.PlannedStartDate).First().PlannedStartDate;
+                project.PlannedEndDate = _DbManager.JalonsContext.Where(p => p.ProjectId == config.IdProject).OrderByDescending(p => p.PlannedEndDate).First().PlannedEndDate;
+                project.RealStartDate = _DbManager.JalonsContext.Where(p => p.ProjectId == config.IdProject).OrderBy(p => p.RealStartDate).First().RealStartDate;
+                project.RealEndDate = _DbManager.JalonsContext.Where(p => p.ProjectId == config.IdProject).OrderByDescending(p => p.RealEndDate).First().RealEndDate;
+
+                _DbManager.ProjetsContext.Update(project);
+                _DbManager.SaveChanges();
+            }
+            catch
+            {
+                __logger.LogError($"Error while trying to update jalon {config.IdJalon}");
+                throw new HttpInternalErrorException($"Error while trying to update jalon {config.IdJalon}");
+            }
+        }
+
     }
 }

@@ -9,7 +9,7 @@ using Tuesday.Repositories;
 namespace Tuesday.Migrations
 {
     [DbContext(typeof(DbManager))]
-    [Migration("20210302133145_initial")]
+    [Migration("20210304141658_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,19 +28,24 @@ namespace Tuesday.Migrations
                     b.Property<int>("ExigenceType")
                         .HasColumnType("int");
 
-                    b.Property<int?>("JalonId")
+                    b.Property<int?>("JalonID")
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("TaskEntityId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JalonId");
+                    b.HasIndex("JalonID");
+
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("TaskEntityId");
 
@@ -53,18 +58,27 @@ namespace Tuesday.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("AssigneeId")
+                    b.Property<int>("AssigneeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<DateTime>("PlannedEndDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("PlannedStartDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("RealEndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RealStartDate")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -81,11 +95,28 @@ namespace Tuesday.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int?>("AssigneeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<DateTime>("PlannedEndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("PlannedStartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RealEndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RealStartDate")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AssigneeId");
 
                     b.ToTable("Project");
                 });
@@ -96,7 +127,7 @@ namespace Tuesday.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("AssigneeId")
+                    b.Property<int>("AssigneeId")
                         .HasColumnType("int");
 
                     b.Property<int>("Cost")
@@ -106,14 +137,20 @@ namespace Tuesday.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int?>("JalonEntityId")
+                    b.Property<int>("JalonId")
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<DateTime>("PlannedEndDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("PlannedStartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RealEndDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("RealStartDate")
@@ -125,8 +162,6 @@ namespace Tuesday.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AssigneeId");
-
-                    b.HasIndex("JalonEntityId");
 
                     b.HasIndex("RequiredTaskId");
 
@@ -154,26 +189,45 @@ namespace Tuesday.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Clem",
+                            LastName = "Laurain"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "Olivier",
+                            LastName = "Petrerella"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Hugo",
+                            LastName = "Molle"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FirstName = "Henri",
+                            LastName = "Michelon"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FirstName = "Julien",
+                            LastName = "Drevron"
+                        });
                 });
 
             modelBuilder.Entity("Tuesday.Entities.ExigenceEntity", b =>
                 {
-                    b.HasOne("Tuesday.Entities.JalonEntity", "Jalon")
+                    b.HasOne("Tuesday.Entities.JalonEntity", null)
                         .WithMany()
-                        .HasForeignKey("JalonId");
-
-                    b.HasOne("Tuesday.Entities.TaskEntity", null)
-                        .WithMany("Exigences")
-                        .HasForeignKey("TaskEntityId");
-
-                    b.Navigation("Jalon");
-                });
-
-            modelBuilder.Entity("Tuesday.Entities.JalonEntity", b =>
-                {
-                    b.HasOne("Tuesday.Entities.UserEntity", "Assignee")
-                        .WithMany()
-                        .HasForeignKey("AssigneeId");
+                        .HasForeignKey("JalonID");
 
                     b.HasOne("Tuesday.Entities.ProjectEntity", null)
                         .WithMany()
@@ -181,31 +235,48 @@ namespace Tuesday.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Assignee");
+                    b.HasOne("Tuesday.Entities.TaskEntity", null)
+                        .WithMany("Exigences")
+                        .HasForeignKey("TaskEntityId");
                 });
 
-            modelBuilder.Entity("Tuesday.Entities.TaskEntity", b =>
+            modelBuilder.Entity("Tuesday.Entities.JalonEntity", b =>
+                {
+                    b.HasOne("Tuesday.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("AssigneeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tuesday.Entities.ProjectEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tuesday.Entities.ProjectEntity", b =>
                 {
                     b.HasOne("Tuesday.Entities.UserEntity", "Assignee")
                         .WithMany()
                         .HasForeignKey("AssigneeId");
 
-                    b.HasOne("Tuesday.Entities.JalonEntity", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("JalonEntityId");
+                    b.Navigation("Assignee");
+                });
+
+            modelBuilder.Entity("Tuesday.Entities.TaskEntity", b =>
+                {
+                    b.HasOne("Tuesday.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("AssigneeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Tuesday.Entities.TaskEntity", "RequiredTask")
                         .WithMany()
                         .HasForeignKey("RequiredTaskId");
 
-                    b.Navigation("Assignee");
-
                     b.Navigation("RequiredTask");
-                });
-
-            modelBuilder.Entity("Tuesday.Entities.JalonEntity", b =>
-                {
-                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("Tuesday.Entities.TaskEntity", b =>

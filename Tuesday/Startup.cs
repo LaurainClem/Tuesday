@@ -31,6 +31,14 @@ namespace Tuesday
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllHosts",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    });
+            });
             services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
             services.AddSwaggerGen();
             services.AddScoped<IConsistencyChecker, ConsistencyChecker>();
@@ -38,6 +46,7 @@ namespace Tuesday
             services.AddScoped<IJalonService, JalonService>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IExigenceService, ExigenceService>();
+            services.AddScoped<IUserService, UserService>();
             string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DbManager>(options => options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
         }
@@ -55,6 +64,8 @@ namespace Tuesday
             app.UseRouting();
 
             app.UseSwagger();
+
+            app.UseCors("AllHosts");
 
             app.UseSwaggerUI(c =>
             {

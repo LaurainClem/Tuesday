@@ -63,11 +63,20 @@ namespace Tuesday.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<DateTime>("PlannedEndDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("PlannedStartDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("RealEndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RealStartDate")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -84,9 +93,24 @@ namespace Tuesday.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("AssigneeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("PlannedEndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("PlannedStartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RealEndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RealStartDate")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -115,6 +139,9 @@ namespace Tuesday.Migrations
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("PlannedEndDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("PlannedStartDate")
                         .HasColumnType("datetime(6)");
@@ -158,6 +185,38 @@ namespace Tuesday.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Clem",
+                            LastName = "Laurain"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "Olivier",
+                            LastName = "Petrerella"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Hugo",
+                            LastName = "Molle"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FirstName = "Henri",
+                            LastName = "Michelon"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FirstName = "Julien",
+                            LastName = "Drevron"
+                        });
                 });
 
             modelBuilder.Entity("Tuesday.Entities.ExigenceEntity", b =>

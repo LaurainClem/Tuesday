@@ -8,5 +8,6 @@ namespace Tuesday.Dtos
     public class ProjectDto
     {
         public string Label { get; set; }
+        public int AssigneeId { get; set; }
     }
 }

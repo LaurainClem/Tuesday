@@ -44,7 +44,6 @@ namespace Tuesday.Controllers
             {
                 AssigneeId = jalonDto.AssigneeId,
                 Label = jalonDto.Label,
-                PlannedStartDate = jalonDto.PlannedStartDate,
                 ProjectId = idProject
             };
             UrlConfig config = new UrlConfig() { IdProject = idProject };
@@ -61,7 +60,6 @@ namespace Tuesday.Controllers
                 JalonEntity jalon = _jalonService.FindOne(config);
                 jalon.AssigneeId = jalonDto.AssigneeId != 0 ? jalonDto.AssigneeId : jalon.AssigneeId;
                 jalon.Label = jalonDto.Label != null ? jalonDto.Label : jalon.Label;
-                jalon.PlannedStartDate = jalonDto.PlannedStartDate != new DateTime() ? jalonDto.PlannedStartDate : jalon.PlannedStartDate;
                 return _jalonService.Update(jalon, config);
             }
             catch

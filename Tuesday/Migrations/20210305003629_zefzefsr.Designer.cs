@@ -9,8 +9,8 @@ using Tuesday.Repositories;
 namespace Tuesday.Migrations
 {
     [DbContext(typeof(DbManager))]
-    [Migration("20210303215338_Exigence2")]
-    partial class Exigence2
+    [Migration("20210305003629_zefzefsr")]
+    partial class zefzefsr
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,21 +18,6 @@ namespace Tuesday.Migrations
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.3");
-
-            modelBuilder.Entity("ExigenceEntityTaskEntity", b =>
-                {
-                    b.Property<int>("ExigencesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TasksId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ExigencesId", "TasksId");
-
-                    b.HasIndex("TasksId");
-
-                    b.ToTable("ExigenceEntityTaskEntity");
-                });
 
             modelBuilder.Entity("Tuesday.Entities.ExigenceEntity", b =>
                 {
@@ -43,7 +28,7 @@ namespace Tuesday.Migrations
                     b.Property<int>("ExigenceType")
                         .HasColumnType("int");
 
-                    b.Property<int>("JalonID")
+                    b.Property<int?>("JalonID")
                         .HasColumnType("int");
 
                     b.Property<string>("Label")
@@ -53,11 +38,16 @@ namespace Tuesday.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TaskEntityId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("JalonID");
 
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("TaskEntityId");
 
                     b.ToTable("Exigence");
                 });
@@ -75,11 +65,20 @@ namespace Tuesday.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<DateTime>("PlannedEndDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("PlannedStartDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("RealEndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RealStartDate")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -96,9 +95,24 @@ namespace Tuesday.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("AssigneeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("PlannedEndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("PlannedStartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RealEndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RealStartDate")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -128,6 +142,9 @@ namespace Tuesday.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<DateTime>("PlannedEndDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("PlannedStartDate")
                         .HasColumnType("datetime(6)");
 
@@ -143,8 +160,6 @@ namespace Tuesday.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AssigneeId");
-
-                    b.HasIndex("JalonId");
 
                     b.HasIndex("RequiredTaskId");
 
@@ -172,36 +187,55 @@ namespace Tuesday.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
-                });
 
-            modelBuilder.Entity("ExigenceEntityTaskEntity", b =>
-                {
-                    b.HasOne("Tuesday.Entities.ExigenceEntity", null)
-                        .WithMany()
-                        .HasForeignKey("ExigencesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Tuesday.Entities.TaskEntity", null)
-                        .WithMany()
-                        .HasForeignKey("TasksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Clem",
+                            LastName = "Laurain"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "Olivier",
+                            LastName = "Petrerella"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Hugo",
+                            LastName = "Molle"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FirstName = "Henri",
+                            LastName = "Michelon"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FirstName = "Julien",
+                            LastName = "Drevron"
+                        });
                 });
 
             modelBuilder.Entity("Tuesday.Entities.ExigenceEntity", b =>
                 {
                     b.HasOne("Tuesday.Entities.JalonEntity", null)
                         .WithMany()
-                        .HasForeignKey("JalonID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("JalonID");
 
                     b.HasOne("Tuesday.Entities.ProjectEntity", null)
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Tuesday.Entities.TaskEntity", null)
+                        .WithMany("Exigences")
+                        .HasForeignKey("TaskEntityId");
                 });
 
             modelBuilder.Entity("Tuesday.Entities.JalonEntity", b =>
@@ -227,17 +261,16 @@ namespace Tuesday.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tuesday.Entities.JalonEntity", null)
-                        .WithMany()
-                        .HasForeignKey("JalonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Tuesday.Entities.TaskEntity", "RequiredTask")
                         .WithMany()
                         .HasForeignKey("RequiredTaskId");
 
                     b.Navigation("RequiredTask");
+                });
+
+            modelBuilder.Entity("Tuesday.Entities.TaskEntity", b =>
+                {
+                    b.Navigation("Exigences");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,7 +2,7 @@
 
 namespace Tuesday.Migrations
 {
-    public partial class Exigence4 : Migration
+    public partial class zefzefsred : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -16,12 +16,14 @@ namespace Tuesday.Services
         private DbManager _DbManager;
         private ILogger<TaskService> __logger;
         private IConsistencyChecker _ConsistencyChecker;
+        private readonly IJalonService _JalonService;
 
-        public TaskService(DbManager dbManager, ILogger<TaskService> logger, IConsistencyChecker consistencyChecker)
+        public TaskService(DbManager dbManager, ILogger<TaskService> logger, IConsistencyChecker consistencyChecker, IJalonService jalonService)
         {
             _DbManager = dbManager;
             __logger = logger;
             _ConsistencyChecker = consistencyChecker;
+            _JalonService = jalonService;
         }
 
         public TaskEntity Add(TaskEntity entity, UrlConfig config)
@@ -32,6 +34,7 @@ namespace Tuesday.Services
                 {
                     _DbManager.TasksContext.Add(entity);
                     _DbManager.SaveChanges();
+                    UpdateJalon(config);
                     return entity;
                 }
                 catch
@@ -117,6 +120,7 @@ namespace Tuesday.Services
                 {
                     _DbManager.TasksContext.Update(entity);
                     _DbManager.SaveChanges();
+                    UpdateJalon(config);
                     return entity;
                 }
                 catch
@@ -128,6 +132,26 @@ namespace Tuesday.Services
             else
             {
                 throw new HttpUrlNotValidException();
+            }
+        }
+
+        public void UpdateJalon(UrlConfig config)
+        {
+            try
+            {
+                JalonEntity jalon = _DbManager.JalonsContext.Find(config.IdJalon);
+                jalon.PlannedStartDate = _DbManager.TasksContext.Where(t => t.JalonId == config.IdJalon).OrderBy(t => t.PlannedStartDate).First().PlannedStartDate;
+                jalon.PlannedEndDate = _DbManager.TasksContext.Where(t => t.JalonId == config.IdJalon).OrderByDescending(t => t.PlannedEndDate).First().PlannedEndDate;
+                jalon.RealStartDate = _DbManager.TasksContext.Where(t => t.JalonId == config.IdJalon).OrderBy(t => t.RealStartDate).First().RealStartDate;
+                jalon.RealEndDate = _DbManager.TasksContext.Where(t => t.JalonId == config.IdJalon).OrderByDescending(t => t.RealEndDate).First().RealEndDate;
+                
+                _DbManager.JalonsContext.Update(jalon);
+                _DbManager.SaveChanges();
+                _JalonService.UpdateProject(config);
+
+            } catch {
+                __logger.LogError($"Error while trying to update jalon {config.IdJalon}");
+                throw new HttpInternalErrorException($"Error while trying to update jalon {config.IdJalon}");
             }
         }
     }

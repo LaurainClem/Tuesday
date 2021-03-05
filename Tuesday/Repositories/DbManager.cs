@@ -15,7 +15,7 @@ namespace Tuesday.Repositories
         public DbSet<ExigenceEntity> ExigencesContext { get; set; }
         public DbSet<JalonEntity> JalonsContext { get; set; }
         public DbSet<ProjectEntity> ProjetsContext { get; set; }
-        public DbSet<UserEntity> UtilisateursContext { get; set; }
+        public DbSet<UserEntity> UsersContext { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,17 +43,18 @@ namespace Tuesday.Repositories
                 .HasOne<UserEntity>()
                 .WithMany()
                 .HasForeignKey(task => task.AssigneeId);
-            /*
-            modelBuilder.Entity<TaskExigence>()
-                .HasKey(taskEntity => new { taskEntity.TaskId, taskEntity.ExigenceId });
-            modelBuilder.Entity<TaskExigence>()
-                .HasOne(taskEntity => taskEntity.Task)
-                .WithMany(task => task.TaskExigences)
-                .HasForeignKey(taskEntity => taskEntity.TaskId);
-            modelBuilder.Entity<TaskExigence>()
-                .HasOne(taskEntity => taskEntity.Exigence)
-                .WithMany(task => task.TaskExigences)
-                .HasForeignKey(taskEntity => taskEntity.ExigenceId); */
+            
+            
+            Seed(modelBuilder);
+        }
+
+        private void Seed(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserEntity>().HasData(new UserEntity() { LastName = "Laurain", FirstName = "Clem", Id=1 });
+            modelBuilder.Entity<UserEntity>().HasData(new UserEntity() { LastName = "Petrerella", FirstName = "Olivier", Id =2 });
+            modelBuilder.Entity<UserEntity>().HasData(new UserEntity() { LastName = "Molle", FirstName = "Hugo", Id =3 });
+            modelBuilder.Entity<UserEntity>().HasData(new UserEntity() { LastName = "Michelon", FirstName = "Henri", Id =4 });
+            modelBuilder.Entity<UserEntity>().HasData(new UserEntity() { LastName = "Drevron", FirstName = "Julien", Id =5 });
         }
     }
 }

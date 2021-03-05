@@ -22,6 +22,8 @@ namespace Tuesday.Entities
         public List<ExigenceEntity> Exigences { get; set; }
         [Required]
         public DateTime PlannedStartDate { get; set; }
+        [Required]
+        public DateTime PlannedEndDate { get; set; }
         public DateTime RealStartDate { get; set; }
         public DateTime RealEndDate { get; set; }
         [Required]

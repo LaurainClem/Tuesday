@@ -6,8 +6,7 @@ using Tuesday.Entities;
 
 namespace Tuesday.Services
 {
-    public interface ITaskService : IBaseService<TaskEntity>
+    public interface IUserService : IBaseService<UserEntity>
     {
-        public void UpdateJalon(UrlConfig config);
     }
 }

@@ -9,5 +9,6 @@ namespace Tuesday.Services
 {
     public interface IJalonService : IBaseService<JalonEntity>
     {
+        public void UpdateProject(UrlConfig config);
     }
 }

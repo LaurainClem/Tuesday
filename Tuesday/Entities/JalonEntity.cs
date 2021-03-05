@@ -14,8 +14,10 @@ namespace Tuesday.Entities
         public int Id { get; set; }
         [Required]
         public string Label { get; set; }
-        [Required]
         public DateTime PlannedStartDate { get; set; }
+        public DateTime PlannedEndDate { get; set; }
+        public DateTime RealStartDate { get; set; }
+        public DateTime RealEndDate { get; set; }
         [Required]
         public int AssigneeId { get; set; }
         [Required]

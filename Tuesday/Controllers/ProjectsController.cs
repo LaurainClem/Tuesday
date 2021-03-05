@@ -45,7 +45,8 @@ namespace Tuesday.Controllers
         {
             var project = new ProjectEntity
             {
-                Label = projectDto.Label
+                Label = projectDto.Label,
+                AssigneeId = projectDto.AssigneeId
             };
             UrlConfig config = new UrlConfig();
 
@@ -69,6 +70,7 @@ namespace Tuesday.Controllers
             {
                 ProjectEntity entity = _projectService.FindOne(config);
                 entity.Label = projectDto.Label != null ? projectDto.Label : entity.Label;
+                entity.AssigneeId = projectDto.AssigneeId;
                 return _projectService.Update(entity, config);
             } catch
             {

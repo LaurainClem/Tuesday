@@ -11,5 +11,6 @@ namespace Tuesday.Services
         public int IdJalon { get; set; }
         public int IdTask { get; set; }
         public int IdExigence { get; set; }
+        public int IdUser { get; set; }
     }
 }

@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Tuesday.Dtos;
 using Tuesday.Entities;
 using Tuesday.Exceptions;
 using Tuesday.Repositories;
@@ -14,11 +13,13 @@ namespace Tuesday.Services
     {
         private DbManager _Context;
         private ILogger<ProjectService> __logger;
+        private readonly IJalonService _JalonService;
 
-        public ProjectService(DbManager dbManager, ILogger<ProjectService> logger, IConsistencyChecker consistencyChecker)
+        public ProjectService(DbManager dbManager, ILogger<ProjectService> logger, IConsistencyChecker consistencyChecker, IJalonService jalonService)
         {
             _Context = dbManager;
             __logger = logger;
+            _JalonService = jalonService;
         }
 
         public ProjectEntity Add(ProjectEntity entity, UrlConfig config)
@@ -92,5 +93,29 @@ namespace Tuesday.Services
                 throw new HttpInternalErrorException($"Error while trying to update project ${config.IdProject}");
             }
         }
+
+        //public ProjectReturned GetDto(ProjectEntity entity)
+        //{
+        //    UrlConfig config = new UrlConfig() { IdProject = entity.Id };
+        //    List<JalonEntity> jalons = _JalonService.FindAll(config);
+        //    DateTime plannedStartDate = jalons[0].PlannedStartDate;
+        //    foreach(JalonEntity jalon in jalons)
+        //    {
+        //        if (jalon.PlannedStartDate < plannedStartDate)
+        //        {
+        //            plannedStartDate = jalon.PlannedStartDate;
+        //        }
+        //    }
+
+        //    try
+        //    {   ProjectReturned projectDto = new ProjectReturned()
+        //        {
+        //            Id = entity.Id,
+        //            Assignee = entity.Assignee,
+        //            Label = entity.Label,
+        //            PlannedStartDate = 
+        //        }
+        //    }
+        //}
     }
 }

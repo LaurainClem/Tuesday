@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tuesday.Dtos;
 using Tuesday.Entities;
+using Tuesday.Exceptions;
 using Tuesday.Services;
 
 namespace Tuesday.Controllers
@@ -49,16 +50,28 @@ namespace Tuesday.Controllers
         }
 
         [HttpPatch]
-        public ExigenceEntity Update([FromBody] ExigenceEntity exigence, int idProject)
+        [Route("{idExigence}")]
+        public ExigenceEntity Update([FromBody] ExigenceDto exigenceDto, int idProject, int idExigence)
         {
-            UrlConfig config = new UrlConfig() { IdProject = idProject };
-            return _exigenceService.Update(exigence, config);
+            try
+            {
+                UrlConfig config = new UrlConfig() { IdProject = idProject, IdExigence = idExigence };
+                ExigenceEntity exigence = _exigenceService.FindOne(config);
+                exigence.Label = exigenceDto.Label;
+                exigence.ExigenceType = exigenceDto.ExigenceType;
+                return _exigenceService.Update(exigence, config);
+            }
+           catch
+            {
+                throw new HttpInternalErrorException("");
+            }
         }
 
         [HttpDelete]
-        public List<ExigenceEntity> Remove([FromBody] ExigenceEntity exigence, int idProject)
+        [Route("{idExigence}")]
+        public List<ExigenceEntity> Remove(int idProject, int idExigence)
         {
-            UrlConfig config = new UrlConfig() { IdProject = idProject };
+            UrlConfig config = new UrlConfig() { IdProject = idProject, IdExigence = idExigence };
             return _exigenceService.Remove(config);
         }
     }
